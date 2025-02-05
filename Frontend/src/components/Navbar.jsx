@@ -11,7 +11,7 @@ const Navbar=()=>{
 
      return(
       <>
-<nav className="  xl:flex hidden border-2 border-gray-300 h-[70px] flex justify-between items-center  ">
+<nav className="  xl:flex  hidden  border-2 border-gray-300 h-[70px] flex justify-between items-center  ">
        
 <div className="flex items-center gap-28 ml-14">
   <div className="text-black font-extrabold text-2xl">
@@ -95,7 +95,7 @@ const Navbar=()=>{
 
 <nav className=" lg:hidden border-2 border-gray-300 h-[70px] w-full flex justify-between items-center" >
     
-<div className="flex items-center ">
+<div className="flex items-center ml-7 ">
  <div className="text-black font-bold">
     <span className="pl-3 pr-1 py-1 bg-red-500 font-semibold text-white">SHOP</span>
     <span className="pl-1">KNOCK</span>
@@ -103,7 +103,7 @@ const Navbar=()=>{
 </div>
 
 
-<div className="flex justify-center items-center gap-5">
+<div className="flex justify-center items-center gap-5 mr-7">
    <div>
     <IoMdSearch className="text-black text-2xl" />
     </div>
@@ -111,7 +111,7 @@ const Navbar=()=>{
 
 
 <div>
-<IoMdMenu className="!h-[30px] !w-[30px]" />
+<IoMdMenu className="!h-[30px] !w-[30px] " />
 
 </div>
 </div>
