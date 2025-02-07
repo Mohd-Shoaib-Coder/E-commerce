@@ -1,7 +1,7 @@
 import React from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-
+import HomePage from "../components/Homepage";
 
 
 
@@ -11,7 +11,7 @@ const Home=()=>{
     return (
         <>
       <Navbar/>
-        <h1>Home</h1>
+        <HomePage/>
         <Footer/>
 
         </>

@@ -11,12 +11,12 @@ const Navbar=()=>{
 
      return(
       <>
-<nav className="  xl:flex  hidden  border-2 border-gray-300 h-[70px] flex justify-between items-center  ">
+<nav className="  xl:flex  hidden  border-2 border-gray-300 h-[80px] flex justify-between items-center   ">
        
 <div className="flex items-center gap-28 ml-14">
   <div className="text-black font-extrabold text-2xl">
     <span className="pl-3 pr-1 py-1 bg-red-500 font-semibold text-white">SHOP</span>
-    <span className="pl-1">KNOCK</span>
+    <span className="pl-1 text-black font-sans">KNOCK</span>
   </div>
 </div>
  
@@ -31,7 +31,7 @@ const Navbar=()=>{
 
 
 
-        <input className="border-2 border-gray-300 h-[40px] w-[320px] rounded-xl ml-48 pl-3" placeholder="Search for products..."></input>
+        <input className="border-2 border-gray-300 h-[40px] w-[500px] rounded-xl ml-48 pl-3" placeholder="Search for products..."></input>
        
        <div className="flex gap-12">
         <FaShoppingCart className="h-[28px] w-[28px] text-red-600 mt-2.5  " />  

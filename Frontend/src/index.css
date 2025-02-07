@@ -1,1 +1,9 @@
 @import "tailwindcss";
+
+
+body{
+    font-family: "PT Serif", serif;
+    font-weight: 500;
+  font-style: normal;
+  }
+  

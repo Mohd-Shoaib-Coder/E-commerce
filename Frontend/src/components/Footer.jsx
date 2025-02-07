@@ -1,10 +1,10 @@
 import React from "react";
-
+import { FaFacebookF, FaInstagram, FaTwitter } from "react-icons/fa";
 const Footer=()=>{
 
 
     return (
-
+<>
 
         <div>
 
@@ -180,7 +180,7 @@ const Footer=()=>{
 
 
 
- <div className="sm:flex sm:justify-evenly sm:flex-row sm:mt-16  flex flex-col justify-center items-center bg-teal-500 sm:bg-white"> 
+ <div className="sm:flex sm:justify-evenly sm:flex-row sm:mt-10 sm:mb-5  flex flex-col justify-center items-center bg-teal-500 sm:bg-white"> 
 
 
 
@@ -222,33 +222,13 @@ const Footer=()=>{
 
 </div>
 
+<div className="hidden sm:visible">
 <hr class="border-t-[2px] border-gray-300 w-3/4 mx-auto my-4 mt-24" />
 
+</div>
 
 
 
-
-
-
-
-<div className="h-20 w-full bg-gray-50 flex flex-col items-center sm:flex sm:flex-row sm:h-10 sm:gap-5 ">
-
-<ul className="flex gap-3 sm:ml-28">
-<li>A</li>
-<li>B</li>
-<li>C</li>
-<li>©2022</li>
-
-</ul>
-
-
-<p className="text-yellow-400">
-
-ShopKNOCK
-</p>
-
-
-<p>rights reserved</p>
 
 
         </div>
@@ -256,6 +236,40 @@ ShopKNOCK
 
 
 
+<div className="bg-gray-900 text-gray-400 py-4 text-center">
+      <div className="max-w-6xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center">
+        
+        {/* Logo and Name */}
+        <div className="mb-2 md:mb-0">
+          <h2 className="text-white text-lg font-semibold">ShopKnock</h2>
+        </div>
+
+        {/* Footer Links */}
+        <div className="flex space-x-4 text-sm">
+          <a href="#" className="hover:text-white transition">Privacy</a>
+          <a href="#" className="hover:text-white transition">Terms</a>
+          <a href="#" className="hover:text-white transition">Contact</a>
+        </div>
+
+        {/* Social Media Icons */}
+        <div className="flex space-x-3 mt-3 md:mt-0">
+          <a href="#" className="text-gray-400 hover:text-white transition">
+            <FaFacebookF size={16} />
+          </a>
+          <a href="#" className="text-gray-400 hover:text-white transition">
+            <FaInstagram size={16} />
+          </a>
+          <a href="#" className="text-gray-400 hover:text-white transition">
+            <FaTwitter size={16} />
+          </a>
+        </div>
+      </div>
+
+      {/* Copyright */}
+      <p className="text-gray-500 text-xs mt-2">
+        © {new Date().getFullYear()} ShopKnock. All Rights Reserved.
+      </p>
+    </div>
 
 
 
@@ -263,10 +277,9 @@ ShopKNOCK
 
 
 
-</div>
 
 
-
+</>
         
     )
 }
