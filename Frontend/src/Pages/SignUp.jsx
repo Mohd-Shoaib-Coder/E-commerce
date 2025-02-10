@@ -1,9 +1,38 @@
 import  React from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import { useState } from "react";
+
+
 
 const SignUp=()=>{
 
+
+  const[firstname,setFirstName]=useState("");
+
+  const [lastname,setLastName]=useState("");
+
+  const [email,setEmail]=useState("");
+
+  const [number,setNumber]=useState("")
+
+  const [password,setPassword]=useState("")
+
+  const [cnfrmpassword,setCnfrmPassword]=useState("")
+  
+  const signupUser =async(e)=>{
+
+e.preventDefault();
+
+ await fetch("http://localhost:4000/signup",{
+  method:"POST",
+  body:JSON.stringify({firstname,lastname,email,number,password,cnfrmpassword}),
+  headers:{"Content-Type":"application/json"},
+  
+
+ })
+
+  }
 
 
     return (
@@ -21,8 +50,10 @@ const SignUp=()=>{
         <h2 className="text-2xl sm:text-3xl font-bold text-center mb-6 text-gray-800">
           Create Your Account
         </h2>
-        <form className="space-y-4 sm:space-y-6">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <form className="space-y-4 sm:space-y-6" onSubmit={signupUser} >
+<div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+
             <div>
               <label className="block text-sm font-medium text-gray-700">
                 First Name
@@ -31,9 +62,13 @@ const SignUp=()=>{
                 type="text"
                 name="firstName"
                 className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                value={firstname}
+                onChange={(e)=>setFirstName(e.target.value)}
                 required
               />
             </div>
+
+
             <div>
               <label className="block text-sm font-medium text-gray-700">
                 Last Name
@@ -42,6 +77,9 @@ const SignUp=()=>{
                 type="text"
                 name="lastName"
                 className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                value={lastname}
+                onChange={(e)=>setLastName(e.target.value)}
+        
                 required
               />
             </div>
@@ -54,6 +92,8 @@ const SignUp=()=>{
               type="email"
               name="email"
               className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              value={email}
+              onChange={(e)=>setEmail(e.target.value)}
               required
             />
           </div>
@@ -65,6 +105,8 @@ const SignUp=()=>{
               type="tel"
               name="phone"
               className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              value={number}
+              onChange={(e)=>setNumber(e.target.value)}
               required
             />
           </div>
@@ -76,6 +118,8 @@ const SignUp=()=>{
               type="password"
               name="password"
               className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              value={password}
+              onChange={(e)=>setPassword(e.target.value)}
               required
             />
           </div>
@@ -87,19 +131,22 @@ const SignUp=()=>{
               type="password"
               name="confirmPassword"
               className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              value={cnfrmpassword}
+              onChange={(e)=>setCnfrmPassword(e.target.value)}
               required
             />
           </div>
           <button
             type="submit"
             className="w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-all duration-300 transform hover:scale-105"
+        
           >
             Sign Up
           </button>
         </form>
         <p className="mt-4 text-center text-sm text-gray-600">
           Already have an account?{" "}
-          <a href="#" className="text-indigo-600 hover:text-indigo-500">
+          <a href="/login" className="text-indigo-600 hover:text-indigo-500">
             Log in
           </a>
         </p>

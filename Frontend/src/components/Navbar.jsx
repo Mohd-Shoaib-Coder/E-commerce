@@ -2,6 +2,7 @@ import React from "react";
 import { FaShoppingCart } from "react-icons/fa";
 import { IoMdSearch } from "react-icons/io";
 import { IoMdMenu } from "react-icons/io";
+import { NavLink } from "react-router-dom";
 
 
 
@@ -22,9 +23,9 @@ const Navbar=()=>{
  
 <div className="flex gap-6 ">
    
-        <p className="font-bold border-2 border-gray-300 rounded-md bg-gray-300 h-[40px] w-[63px] flex justify-center items-center text-lg hover:h-[42px] hover:w-[65px] transition-transform hover:scale-105 ">Home</p>
+        <p className="font-bold border-2 border-gray-300 rounded-md bg-gray-300 h-[40px] w-[63px] flex justify-center items-center text-lg hover:h-[42px] hover:w-[65px] transition-transform hover:scale-105 font-sans ">Home</p>
         
-        <p className="font-bold  border-2 border-gray-300 rounded-md bg-gray-300 h-[40px] w-[85px] flex justify-center items-center text-lg hover:h-[42px] hover:w-[87px] transition-transform hover:scale-105">Products</p>
+        <p className="font-bold  border-2 border-gray-300 rounded-md bg-gray-300 h-[40px] w-[85px] flex justify-center items-center text-lg hover:h-[42px] hover:w-[87px] transition-transform hover:scale-105 font-sans">Products</p>
 
         </div> 
 
@@ -37,7 +38,7 @@ const Navbar=()=>{
         <FaShoppingCart className="h-[28px] w-[28px] text-red-600 mt-2.5  " />  
 
            <div className="bg-black text-white h-[47px] w-[90px] rounded-md flex justify-center items-center font-bold text-xl pb-[6px] hover:border-2 hover:border-black hover:text-black hover:bg-white  mr-14"> 
-        <button>Login</button>
+        <NavLink to="/login">Login</NavLink>
         </div>
         </div>
         </nav>

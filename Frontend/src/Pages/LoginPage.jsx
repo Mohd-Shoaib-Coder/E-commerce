@@ -54,7 +54,7 @@ const LoginPage=()=>{
         </form>
         <p className="mt-4 text-center text-sm text-gray-600">
           Don't have an account?{" "}
-          <a href="#" className="text-indigo-600 hover:text-indigo-500">
+          <a href="/signup" className="text-indigo-600 hover:text-indigo-500">
             Sign up
           </a>
         </p>
