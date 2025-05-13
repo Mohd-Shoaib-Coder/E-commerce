@@ -2,11 +2,14 @@ import  React from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 
 
 const SignUp=()=>{
 
+
+  const navigate=useNavigate();
 
   const[firstname,setFirstName]=useState("");
 
@@ -22,15 +25,35 @@ const SignUp=()=>{
   
   const signupUser =async(e)=>{
 
+if(password !== cnfrmpassword){
+
+  alert("passowrd doesnt match");
+  return;
+}
+
+
 e.preventDefault();
 
- await fetch("http://localhost:4000/signup",{
+const response = await fetch("http://localhost:4000/signup",{
   method:"POST",
   body:JSON.stringify({firstname,lastname,email,number,password,cnfrmpassword}),
   headers:{"Content-Type":"application/json"},
   
 
  })
+
+
+ if(response.ok){
+
+  setTimeout(() => {
+    
+    navigate("/login")
+  }, 2000);
+  
+ }else{
+
+  alert("signup failed")
+ }
 
   }
 
@@ -39,7 +62,7 @@ e.preventDefault();
 
 
         <>
-        <Navbar/>
+        {/* <Navbar/> */}
          <div
       className="min-h-screen flex items-center justify-center bg-cover bg-center"
       style={{

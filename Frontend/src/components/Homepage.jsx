@@ -2,7 +2,7 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-
+import { NavLink } from "react-router-dom";
 
 const HomePage = () => {
   return (
@@ -15,14 +15,14 @@ const HomePage = () => {
         className="relative h-[calc(100vh-70px)] sm:h-[calc(100vh-80px)] flex items-center justify-center bg-cover bg-center"
         style={{
           backgroundImage:
-            "url('https://cdn.pixabay.com/photo/2020/05/21/18/52/supermarket-5202138_640.jpg')",
+            "url('https://img.freepik.com/free-photo/flat-lay-black-friday-tags-with-shopping-cart_23-2148285102.jpg?t=st=1739700818~exp=1739704418~hmac=67d6f23ac58d05c070cfca6f03a51b8238999a84139fc96b4cdffc90d76add8b&w=1060')",
         }}
       >
         <motion.div
           initial={{ opacity: 0, y: -50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1 }}
-          className="text-center bg-black bg-opacity-50 p-8 rounded-lg"
+          className="text-center bg-black p-8 rounded-lg"
         >
           <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
             Welcome to Our Store
@@ -35,7 +35,7 @@ const HomePage = () => {
             whileTap={{ scale: 0.95 }}
             className="bg-blue-600 text-white px-8 py-3 rounded-full hover:bg-blue-700 transition duration-300"
           >
-            Shop Now
+            <NavLink to="/products">Shop Now</NavLink>
           </motion.button>
         </motion.div>
       </section>
@@ -76,9 +76,9 @@ const HomePage = () => {
 <div className="p-6">
         <h3 className="text-xl font-semibold mb-2">MEN's Fashion</h3>
         <p className="text-gray-600 mb-4">Looks does Matters.</p>
-        <button className="bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 transition duration-300">
-          Add to Cart
-        </button>
+        <NavLink to="/products" className="bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 transition duration-300">
+          Shop Now
+        </NavLink>
       </div>
           </motion.div>
           {/* Female Model */}
@@ -96,9 +96,9 @@ const HomePage = () => {
 <div className="p-6">
         <h3 className="text-xl font-semibold mb-2">Women's Fashion</h3>
         <p className="text-gray-600 mb-4">Be ready to make him feel jealous.</p>
-        <button className="bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 transition duration-300">
-          Add to Cart
-        </button>
+        <NavLink to="/products" className="bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 transition duration-300">
+          Shop Now
+        </NavLink>
       </div>
           </motion.div>
           {/* Child Model */}
@@ -117,9 +117,9 @@ const HomePage = () => {
 <div className="p-6">
         <h3 className="text-xl font-semibold mb-2">Clothing Collection</h3>
         <p className="text-gray-600 mb-4">Complete your Wardrobe.</p>
-        <button className="bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 transition duration-300">
-          Add to Cart
-        </button>
+        <NavLink to="/products" className="bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 transition duration-300">
+        Shop Now
+        </NavLink>
       </div>
           </motion.div>
         </div>
@@ -146,9 +146,9 @@ const HomePage = () => {
       <div className="p-6">
         <h3 className="text-xl font-semibold mb-2">Stylish Sneakers</h3>
         <p className="text-gray-600 mb-4">Perfect for your daily adventures.</p>
-        <button className="bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 transition duration-300">
-          Add to Cart
-        </button>
+        <NavLink to="/products" className="bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 transition duration-300">
+        Shop Now
+        </NavLink>
       </div>
     </motion.div>
 
@@ -162,9 +162,9 @@ const HomePage = () => {
       <div className="p-6">
         <h3 className="text-xl font-semibold mb-2">Wireless Headphones</h3>
         <p className="text-gray-600 mb-4">Immerse yourself in music.</p>
-        <button className="bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 transition duration-300">
-          Add to Cart
-        </button>
+        <NavLink to="/products" className="bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 transition duration-300">
+        Shop Now
+        </NavLink>
       </div>
     </motion.div>
 
@@ -178,9 +178,9 @@ const HomePage = () => {
       <div className="p-6">
         <h3 className="text-xl font-semibold mb-2">Smart Watch</h3>
         <p className="text-gray-600 mb-4">Stay connected and stylish.</p>
-        <button className="bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 transition duration-300">
-          Add to Cart
-        </button>
+        <NavLink to="/products" className="bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 transition duration-300">
+        Shop Now
+        </NavLink>
       </div>
     </motion.div>
   </div>
@@ -200,6 +200,4 @@ const HomePage = () => {
 
 export default HomePage;
 
-
-// https://images.unsplash.com/photo-1523381294911-8d3cead13475?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80
-//https://img.freepik.com/free-photo/cyber-monday-shopping-sales_23-2148688502.jpg?t=st=1738849338~exp=1738852938~hmac=781f8c187a0c48037467cddec927d51942023aa01835c6f9f3b8b1ffa6a2bc20&w=1060
+//https://cdn.pixabay.com/photo/2020/05/21/18/52/supermarket-5202138_640.jpg
