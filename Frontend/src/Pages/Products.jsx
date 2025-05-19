@@ -1,238 +1,147 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import{useDispatch,useSelector} from "react-redux";
+import Filter from "../components/Filter";
 import { fetchData } from "../Redux/Slice/productItem";
-import { useEffect ,useState} from "react";
 import { addToCart } from "../Redux/Slice/cartItem";
 
+const Products = () => {
 
-const Products=()=>{
 
-
-const dispatch =useDispatch();
-
-const {isLoading,data,isError}=useSelector((state)=>state.data)
-const addItemCart=useSelector((state)=>state.cart)
-
-
-useEffect(()=>{
-
-
-dispatch(fetchData());
-
-},[dispatch]);
-
-
-
-
-
-
-    return (
-
-<>
-{/* <Navbar/> */}
-<section className="p-6 bg-gray-200 flex">
-
-    {/* filter products  */}
-
-
-
-<div className="h-[calc(100vh-80px)] w-1/5  bg-white p-4 ">
-
-<div className=" ">
-
-    <div className="flex justify-center">
-
-    <div className="bg-red-500 text-white text-2xl flex justify-center p-1 font-bold w-9/10">Filter Products</div>
-
-    </div>
-
-    <div className="ml-4 mt-6 text-lg font-semibold ">
-
-<div className="flex gap-2 flex-start  ">
-
-<p>Price Increase</p>
-<input type="checkbox" />
-</div>
-
-
-<div className="flex gap-2 flex-start mt-2 ">
-
-<p>Price Decrease</p>
-<input type="checkbox" />
-</div>
-
-
-
-
-<div className="flex gap-2 flex-start mt-2 ">
-
-<p>Sort A to Z </p>
-<input type="checkbox" />
-</div>
-
-
-
-<div className="flex gap-2 flex-start mt-2 ">
-
-<p>Men</p>
-<input type="checkbox" />
-</div>
-
-
-
-<div className="flex gap-2 flex-start mt-2 ">
-
-<p>Women</p>
-<input type="checkbox" />
-</div>
-
-
-    </div>
-
-
-
-</div>
-
-</div>
-
-
-
-
-
-
-
-
-{/* proudcts image */}
-
-<div className=" flex flex-column flex-wrap min-w-full ml-10">
-{isLoading || data===null?(  <div className="flex items-center justify-center h-screen bg-gray-100">
-    <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
-  </div>) 
-
-: isError?( <p className="text-red-500 font-bold text-xl">Error fetching data</p>)
-
-
-
-
-: (
-
-  data.map((products)=>(
-
-    <div className="" key={products.id}>
-
-
-{/* <div className="ml-10 border-2 mt-2"> */}
-
-<div className="flex flex-wrap flex-col w-full  pl-3 bg-gray-200  ">
-
-<div className="flex flex-wrap justify-evenly ">
-
-
-<div className="h-[400px] w-[300px]  p-2 flex flex-col items-center rounded-2xl mb-6 bg-white">
-  <div className="h-[250px] w-full overflow-hidden ">
-    <img
-      src={products.image}
-      alt="product"
-      className="w-full h-full object-cover"
-    />
-  </div>
-  <p className="mt-3 font-bold text-lg">{products.title}</p>
-  <p className="text-red-500 font-bold  text-lg">$ {products.price}</p>
-  <button onClick={()=>dispatch(addToCart(products))} className="mt-3 px-4 py-2 bg-blue-500 text-white rounded font-extrabold text-xl w-9/10 hover:bg-blue-600" >Add to Cart</button>
-</div>
-
-
-</div>
-</div>
-</div>
-// </div>
-
-
-
-
-    
-  ))
-)
-
-
-}
-
-
-
-
-
-<div className="flex justify-center items-center space-x-2 mt-8  w-full">
-  <button className="px-4 py-2 font-bold text-white bg-black rounded-md hover:bg-gray-800">1</button>
-  <button className="px-4 py-2 font-bold text-white bg-black rounded-md hover:bg-gray-800">2</button>
+  const dispatch = useDispatch();
+  const filterState=useSelector((state)=>state.filter.Filter)
   
-  <span className="px-4 py-2 font-bold">...</span>
-  <button className="px-4 py-2 font-bold text-white bg-black rounded-md hover:bg-gray-800">NEXT</button>
-</div>
+
+  const { isLoading, data, isError } = useSelector((state) => state.data);
+  const [currentPage, setCurrentPage] = useState(0);
+  
+  const itemsPerPage = 8
+  
+  
+  const ProductsToRender=filterState && filterState.length > 0 ? filterState : data 
+    
 
 
 
 
+  const startIndex = currentPage * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const visibleProducts = ProductsToRender?ProductsToRender.slice(startIndex, endIndex) : [];
+  const totalPages = ProductsToRender ? Math.ceil(ProductsToRender.length / itemsPerPage) : 0;
 
 
+  const handlePrev = () => {
+    if (currentPage > 0) setCurrentPage(currentPage - 1);
+  };
+
+  const handleNext = () => {
+    if (currentPage < totalPages - 1) setCurrentPage(currentPage + 1);
+  };
+
+  useEffect(() => {
+    dispatch(fetchData());
+  }, [dispatch]);
 
 
+  
+useEffect(() => {
+  setCurrentPage(0);
+}, [filterState]);
 
-</div>
-
-
-
-
-
-
-
-
+useEffect(() => {
+  console.log("visible products", visibleProducts);
+}, [filterState]);
 
 
+  return (
+    <>
+      <section className="bg-gray-100 min-h-screen overflow-x-hidden">
+        <div className="flex flex-row min-h-screen overflow-x-hidden">
+          {/* Filter Sidebar */}
+          <div className="w-auto h-[calc(100vh-80px)] flex-shrink-0 mt-4">
+            <Filter data={data} />
+          </div>
 
+          {/* Products */}
+          <div className="flex-1 p-4">
+            {isLoading || data === null ? (
+              <div className="flex items-center justify-center h-96">
+                <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+              </div>
+            ) : isError ? (
+              <p className="text-red-500 font-bold text-xl">
+                Error fetching data
+              </p>
+            ) : (
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                {visibleProducts.map((product) => (
+                  <div
+                    key={product.id}
+                    className="bg-white p-4 rounded-xl shadow-md flex flex-col justify-between h-[450px]"
+                  >
+                    <div className="h-[220px] w-full mb-4 overflow-hidden rounded-md">
+                      <img
+                        src={product.image}
+                        alt="product"
+                        className="w-full h-full object-contain"
+                      />
+                    </div>
+                    <h3 className="font-bold text-md line-clamp-2 mb-1 flex justify-center">
+                      {product.title}
+                    </h3>
+                    <p className="text-red-500 font-bold text-lg mb-3 flex justify-center">
+                      $ {product.price}
+                    </p>
+                    <div className="mt-auto">
+                      <button
+                        onClick={() => dispatch(addToCart(product))}
+                        className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 font-semibold"
+                      >
+                        Add to Cart
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
 
+            {/* Pagination */}
+            <div className="flex justify-center items-center space-x-4 mt-10">
+              <button
+                onClick={handlePrev}
+                disabled={currentPage === 0}
+                className={`px-4 py-2 rounded font-bold ${
+                  currentPage === 0
+                    ? "bg-white text-black border border-gray-400 cursor-not-allowed"
+                    : "bg-black text-white hover:bg-white hover:text-black hover:border-2 hover:border-black"
+                }`}
+              >
+                Prev
+              </button>
 
+              <span className="font-bold px-4 py-2 bg-gray-300 rounded-md">
+                {currentPage + 1}
+              </span>
 
-
-
-
-
-
-
-
-
-
-
-
-
-</section>
-
-
-
-
-
-
-
-
-
-
-<Footer/>
-
-
-
-</>
-
-
-
-    )
-}
+              <button
+                onClick={handleNext}
+                disabled={currentPage === totalPages - 1}
+                className={`px-4 py-2 rounded font-bold ${
+                  currentPage === totalPages - 1
+                    ? "bg-white text-black border border-gray-400 cursor-not-allowed"
+                    : "bg-black text-white hover:bg-white hover:text-black hover:border-2 hover:border-black"
+                }`}
+              >
+                Next
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+      <Footer />
+    </>
+  );
+};
 
 export default Products;
-
-
-
-
-
-
-
