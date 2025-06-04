@@ -5,8 +5,14 @@ import Footer from "../components/Footer";
 import Filter from "../components/Filter";
 import { fetchData } from "../Redux/Slice/productItem";
 import { addToCart } from "../Redux/Slice/cartItem";
+import { sendCartItem } from "../components/apiCart";
+
+
+
+
 
 const Products = () => {
+
 
 
   const dispatch = useDispatch();
@@ -49,9 +55,7 @@ useEffect(() => {
   setCurrentPage(0);
 }, [filterState]);
 
-useEffect(() => {
-  console.log("visible products", visibleProducts);
-}, [filterState]);
+
 
 
   return (
@@ -95,11 +99,21 @@ useEffect(() => {
                     </p>
                     <div className="mt-auto">
                       <button
-                        onClick={() => dispatch(addToCart(product))}
+                      
+                        onClick={() =>{ dispatch(addToCart(product))
+                          sendCartItem(product)
+                        }}
                         className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 font-semibold"
                       >
                         Add to Cart
                       </button>
+
+
+                      
+
+
+
+
                     </div>
                   </div>
                 ))}
@@ -145,3 +159,20 @@ useEffect(() => {
 };
 
 export default Products;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

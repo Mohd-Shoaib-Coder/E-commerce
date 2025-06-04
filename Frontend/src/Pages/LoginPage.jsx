@@ -25,12 +25,16 @@ const loginData={email,password};
 method:"POST",
 body:JSON.stringify(loginData),
 headers:{"Content-Type":"application/json"},
+credentials: "include"
 });
 
 
+    const data = await response.json();
 
- if(response.ok){
 
+ if(response.ok ){
+ 
+  // localStorage.setItem("token", data.token); 
 setLoggedIn(true);
 
 
@@ -41,7 +45,7 @@ setTimeout(()=>{
 
 }else{
 
-  console.log("response from backend " ,response.ok)
+  
   alert("Wrong credentials")
 }
 }catch(error){
@@ -111,3 +115,12 @@ setTimeout(()=>{
 }
 
 export default LoginPage
+
+
+
+
+
+
+
+
+

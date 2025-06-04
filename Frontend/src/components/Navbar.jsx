@@ -12,7 +12,51 @@ const Navbar = ({ loggedIn, setLoggedIn }) => {
   const cartItems = useSelector((state) => state.cart.cart);
 
   const [showCard,setShowCard]=useState(false);
-  const [showMenu,setShowMenu]=useState(false)
+  const [showMenu,setShowMenu]=useState(false);
+
+
+  const logOut=async()=>{
+ 
+    try{
+
+      const token=localStorage.getItem("token");
+
+      const response=await fetch("http://localhost:4000/logout",{
+
+        method:"POST",
+        // headers:{
+        //   "Content-Type":"application/json",
+        //   Authorization:`Bearer ${token}`,
+
+        // },
+        credentials:"include"
+      })
+
+      if(!response.ok){
+
+        throw new Error("Failed to Logout")
+      }
+
+
+const data=await response.json();
+console.log(data.message);
+
+localStorage.removeItem("token");
+setLoggedIn(false);
+
+window.location.reload();
+
+
+    }catch(error){
+
+      console.error("Logout error:" ,error.message);
+      throw error;
+    }
+
+
+
+
+  }
 
 
   return (
@@ -93,7 +137,7 @@ const Navbar = ({ loggedIn, setLoggedIn }) => {
           </NavLink>
 
           <div className="bg-black text-white h-[45px] w-[90px] rounded-md flex justify-center items-center font-semibold text-lg hover:bg-white hover:text-black hover:border hover:border-black transition-all duration-300 mr-6">
-            {loggedIn ? <button>Logout</button> : <NavLink to="/login">Login</NavLink>}
+            {loggedIn ? <button onClick={logOut}>Logout</button> : <NavLink to="/login">Login</NavLink>}
           </div>
         </div>
       </nav>
@@ -194,6 +238,19 @@ const Navbar = ({ loggedIn, setLoggedIn }) => {
   <NavLink to="/cart" className="flex justify-center text-gray-800 font-semibold text-base hover:bg-gray-200 hover:scale-[1.01] rounded-md py-2 px-3 transition-all duration-200">
     Cart
   </NavLink>
+{
+  loggedIn ? 
+  <button 
+    onClick={logOut} // Add onClick handler
+    className="flex justify-center text-gray-800 font-semibold text-base hover:bg-gray-200 hover:scale-[1.01] rounded-md py-2 px-3 transition-all duration-200"
+  >
+    LogOut
+  </button> : 
+  <NavLink to="/login" className="flex justify-center text-gray-800 font-semibold text-base hover:bg-gray-200 hover:scale-[1.01] rounded-md py-2 px-3 transition-all duration-200">
+    LogIn
+  </NavLink>
+}
+ 
 
 </div>
 
@@ -207,3 +264,4 @@ const Navbar = ({ loggedIn, setLoggedIn }) => {
 };
 
 export default Navbar;
+

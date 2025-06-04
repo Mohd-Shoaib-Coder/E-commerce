@@ -1,5 +1,3 @@
-import React from "react";
-import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { useDispatch,useSelector } from "react-redux";
 import { removeFromCart } from "../Redux/Slice/cartItem";
@@ -9,29 +7,21 @@ import { NavLink } from "react-router-dom";
 
 const Cart = () => {
 
+
+  
 const dispatch=useDispatch();
 
 const cartItems=useSelector((state)=>state.cart.cart)
 const totalAmount=useSelector((state)=>state.cart.totalAmount)
 
-// console.log("cartItems",cartItems)
-// e.prevenDefault();
-
-
-// const response=await fetch("https://localhost:4000/cart",{
-// method:"POST",
-// body:JSON.stringify([cartItems.image,]),
-
-
-// }) 
-
 
 
   return (
     <>
-      {/* <Navbar /> */}
+      
 
       
+
       <main className="min-h-screen bg-gray-200 p-4 sm:p-6 md:p-10 font-sans">
   <h1 className="text-3xl sm:text-4xl font-bold text-center text-[#343a40] mb-10">
     🛒 Your Shopping Cart
@@ -138,3 +128,20 @@ const totalAmount=useSelector((state)=>state.cart.totalAmount)
 };
 
 export default Cart;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
