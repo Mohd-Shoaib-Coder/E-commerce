@@ -5,6 +5,12 @@ const {Schema}=mongoose;
 
 const cartSchema=new Schema({
 
+    user:{
+
+type:mongoose.Schema.Types.ObjectId,
+ref:"user",
+required:true,
+    },
 
 title:{
     type:String,
@@ -14,9 +20,26 @@ price:{
     type:String,
     required:true,
 },
+
+description:{
+
+    type:String,
+    required:true,
+},
+category:{
+
+     type:String,
+    required:true,
+},
 image:{
     type:String,
     required:true,
+},
+quantity:{
+
+    type:Number,
+    default:1,
+    min:1
 }
 
 

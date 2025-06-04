@@ -4,9 +4,11 @@ const cors=require("cors")
 const app=express();
 const userModel=require("./Models/user");
 const cartModel=require("./Models/cart")
+const cookieParser=require("cookie-parser")
 const bcrypt = require('bcrypt');
 const saltRounds=10;
 const jwt=require("jsonwebtoken")
+const verifyUser=require("./Middlewares/verify");
 
 
 
@@ -21,9 +23,11 @@ mongoose.connect("mongodb+srv://000sheikhsiddiqui:EbNEyTIsgtX3B7su@cluster0.8jis
 
 
 app.use(express.json());
+app.use(cookieParser())
+
 app.use(cors({
     origin:"http://localhost:5173",
-    methods:["GET","POST"],
+    methods:["GET","POST","DELETE", "PUT"],
     credentials:true
 }));
 
@@ -78,7 +82,7 @@ try{
 
 
     const user=await userModel.findOne({email});
-
+    
     if(!user){
 
         return res.status(404).json({message:"User not Found"})
@@ -92,9 +96,19 @@ try{
 
     if(check){
 
-        const token=jwt.sign({},"abbajabbadabba");
-        res.cookie("token",token,{ httpOnly: true })
-        return res.status(200).json({meassage:"Login Successfull"})
+        const token=jwt.sign({id:user._id},"abbajabbadabba");
+        
+        res.cookie("token",token,{ httpOnly: true , sameSite: "Lax", })
+       return res.status(200).json({
+      message: "Login successful",
+      // token,
+      user: {
+        id: user._id,
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+      },
+    })
     
     }else{
 
@@ -113,16 +127,76 @@ try{
 
 
 
-// app.post("/cart",function(req,res){
 
-//    const cartItem=cartModel.create({
+
+
+app.post("/cart", verifyUser, async function(req, res) {
+  try {
+    const { cartItems } = req.body;
+   
+    const userId = req.userId; 
+
+    if (!cartItems) {
+      return res.status(400).json({ error: "Missing cartItems in request body" });
+    }
+
+    const { title, price, description, category, image, quantity = 1 } = cartItems;
     
-//     title,
-//     price,
-//     image,
+    
+    const existingItem = await cartModel.findOne({ 
+      user: userId,  
+      title: title 
+    });
 
-//    })
-// });
+
+    if (existingItem) {
+      existingItem.quantity += quantity;
+      await existingItem.save();
+      return res.status(200).json({
+        message: "Item quantity updated",
+        status: true,
+        item: existingItem
+      });
+    } else {
+      const newItem = await cartModel.create({
+        title,
+        price,
+        description,
+        category,
+        image,
+        quantity,
+        user: userId,  
+      });
+      
+      return res.status(201).json({
+        message: "Item added to cart",
+        status: true,
+        item: newItem
+      });
+    }
+  } catch (err) {
+    console.error("Error processing cart:", err);
+    res.status(500).json({ 
+      error: "Failed to process cart item",
+      details: err.message 
+    });
+  }
+});
+
+
+
+app.post("/logout",function(req,res){
+
+res.clearCookie("token",{
+  httpOnly:true,
+  sameSite:"Lax",
+  secure:false,
+});
+res.status(200).json({message:"Logout successfull"})
+
+
+})
+
 
 
 
@@ -140,3 +214,4 @@ app.listen(Port,
 
 //Products api
 //https://dummyjson.com/products?limit=50
+//eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MGY2NGN
