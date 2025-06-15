@@ -6,8 +6,8 @@ import Filter from "../components/Filter";
 import { fetchData } from "../Redux/Slice/productItem";
 import { addToCart } from "../Redux/Slice/cartItem";
 import { sendCartItem } from "../components/apiCart";
-
-
+import { setSearchQuery } from "../Redux/Slice/searchItems";
+import { useLocation } from "react-router-dom";
 
 
 
@@ -17,7 +17,7 @@ const Products = () => {
 
   const dispatch = useDispatch();
   const filterState=useSelector((state)=>state.filter.Filter)
-  
+  const searchQuery=useSelector((state)=>state.search.query)
 
   const { isLoading, data, isError } = useSelector((state) => state.data);
   const [currentPage, setCurrentPage] = useState(0);
@@ -25,17 +25,25 @@ const Products = () => {
   const itemsPerPage = 8
   
   
-  const ProductsToRender=filterState && filterState.length > 0 ? filterState : data 
+  // const ProductsToRender=filterState && filterState.length > 0 ? filterState : data 
     
+const ProductsToRender = filterState?.length > 0 ? filterState : data;
+
+const filteredBySearch = searchQuery
+  ? ProductsToRender?.filter((product) =>
+      product.title.toLowerCase().includes(searchQuery.toLowerCase())
+    )
+  : ProductsToRender;
 
 
 
 
   const startIndex = currentPage * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
-  const visibleProducts = ProductsToRender?ProductsToRender.slice(startIndex, endIndex) : [];
-  const totalPages = ProductsToRender ? Math.ceil(ProductsToRender.length / itemsPerPage) : 0;
-
+  // const visibleProducts = ProductsToRender?ProductsToRender.slice(startIndex, endIndex) : [];
+  // const totalPages = ProductsToRender ? Math.ceil(ProductsToRender.length / itemsPerPage) : 0;
+  const visibleProducts = filteredBySearch?.slice(startIndex, endIndex) || [];
+  const totalPages = filteredBySearch ? Math.ceil(filteredBySearch.length / itemsPerPage) : 0;
 
   const handlePrev = () => {
     if (currentPage > 0) setCurrentPage(currentPage - 1);
@@ -55,8 +63,16 @@ useEffect(() => {
   setCurrentPage(0);
 }, [filterState]);
 
+useEffect(() => {
+  setCurrentPage(0);
+}, [searchQuery, filterState]);
 
 
+useEffect(() => {
+  return () => {
+    dispatch(setSearchQuery("")); // clear search query when leaving the page
+  };
+}, [dispatch]);
 
   return (
     <>
@@ -78,46 +94,48 @@ useEffect(() => {
                 Error fetching data
               </p>
             ) : (
-              <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                {visibleProducts.map((product) => (
-                  <div
-                    key={product.id}
-                    className="bg-white p-4 rounded-xl shadow-md flex flex-col justify-between h-[450px]"
-                  >
-                    <div className="h-[220px] w-full mb-4 overflow-hidden rounded-md">
-                      <img
-                        src={product.image}
-                        alt="product"
-                        className="w-full h-full object-contain"
-                      />
-                    </div>
-                    <h3 className="font-bold text-md line-clamp-2 mb-1 flex justify-center">
-                      {product.title}
-                    </h3>
-                    <p className="text-red-500 font-bold text-lg mb-3 flex justify-center">
-                      $ {product.price}
-                    </p>
-                    <div className="mt-auto">
-                      <button
-                      
-                        onClick={() =>{ dispatch(addToCart(product))
-                          sendCartItem(product)
-                        }}
-                        className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 font-semibold"
-                      >
-                        Add to Cart
-                      </button>
+             <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+  {visibleProducts.length > 0 ? (
+    visibleProducts.map((product) => (
+      <div
+        key={product.id}
+        className="bg-white p-4 rounded-xl shadow-md flex flex-col justify-between h-[450px]"
+      >
+        <div className="h-[220px] w-full mb-4 overflow-hidden rounded-md">
+          <img
+            src={product.image}
+            alt="product"
+            className="w-full h-full object-contain"
+          />
+        </div>
+        <h3 className="font-bold text-md line-clamp-2 mb-1 flex justify-center">
+          {product.title}
+        </h3>
+        <p className="text-red-500 font-bold text-lg mb-3 flex justify-center">
+          $ {product.price}
+        </p>
+        <div className="mt-auto">
+          <button
+            onClick={() => {
+              dispatch(addToCart(product));
+              sendCartItem(product);
+            }}
+            className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 font-semibold"
+          >
+            Add to Cart
+          </button>
+        </div>
+      </div>
+    ))
+  ) : (
+    <div className="col-span-full text-center mt-10">
+      <p className="text-gray-500 font-semibold text-lg">
+        No products found matching your search.
+      </p>
+    </div>
+  )}
+</div>
 
-
-                      
-
-
-
-
-                    </div>
-                  </div>
-                ))}
-              </div>
             )}
 
             {/* Pagination */}

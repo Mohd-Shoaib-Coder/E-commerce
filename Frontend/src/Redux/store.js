@@ -2,7 +2,7 @@ import {configureStore} from "@reduxjs/toolkit";
 import dataReducer from  "./Slice/productItem";
 import cartReducer from  "./Slice/cartItem"
 import filterReducer from "./Slice/filterItems"
-// import authReducer from "./Slice/authSlice"
+import searchReducer from "./Slice/searchItems"
 
 
 
@@ -13,6 +13,6 @@ export const store=configureStore({
        data:dataReducer,
        cart:cartReducer,
        filter:filterReducer,
-    //    auth: authReducer,
+       search:searchReducer,
     }
 });

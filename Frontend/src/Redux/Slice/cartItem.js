@@ -55,7 +55,7 @@ const removeItem=state.cart.find((i)=>i.id===i.id)
 if(removeItem){
 
     state.totalQuantity -=removeItem.quantity;
-    // state.totalAmount -=removeItem.price * removeItem.quantity;
+   
     state.totalAmount=parseFloat((removeItem.price * removeItem.quantity).toFixed(2))
     state.cart =state.cart.filter((item)=>item.id !== id);
 }

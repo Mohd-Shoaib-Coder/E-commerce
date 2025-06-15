@@ -39,6 +39,25 @@ app.get("/",function(req,res){
 });
 
 
+app.get("/verify", verifyUser, async (req, res) => {
+  try {
+    const user = await userModel.findById(req.userId).select("-password");
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json({
+      status: true,
+      user,
+    });
+  } catch (err) {
+    console.error("Error verifying user:", err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+
+
 
 app.post("/signup",async function(req,res){
 
@@ -101,7 +120,6 @@ try{
         res.cookie("token",token,{ httpOnly: true , sameSite: "Lax", })
        return res.status(200).json({
       message: "Login successful",
-      // token,
       user: {
         id: user._id,
         email: user.email,
@@ -132,9 +150,11 @@ try{
 
 app.post("/cart", verifyUser, async function(req, res) {
   try {
+    
     const { cartItems } = req.body;
    
     const userId = req.userId; 
+   
 
     if (!cartItems) {
       return res.status(400).json({ error: "Missing cartItems in request body" });
@@ -168,6 +188,8 @@ app.post("/cart", verifyUser, async function(req, res) {
         user: userId,  
       });
       
+      await newItem.save();
+
       return res.status(201).json({
         message: "Item added to cart",
         status: true,
@@ -182,6 +204,44 @@ app.post("/cart", verifyUser, async function(req, res) {
     });
   }
 });
+
+
+app.get("/cart",verifyUser,async function(req,res){
+
+try{
+
+  const userId=req.userId;
+
+  const cartItems=await cartModel.find({user:userId});
+  return res.status(200).json(cartItems);
+}catch(err){
+  console.log("Failed to fetch cart",err);
+  res.status(500).json({error:"Failed to fetch cart items"})
+}
+
+})
+
+
+
+
+app.post("/delete", verifyUser, async (req, res) => {
+  const userId = req.userId;
+  const itemId = req.body.itemId;
+
+  try {
+    const deleted = await cartModel.findOneAndDelete({ _id: itemId, user: userId });
+
+    if (!deleted) {
+      return res.status(404).json({ message: "Item not found or already deleted" });
+    }
+
+    res.status(200).json({ message: "Item deleted from database" });
+  } catch (error) {
+    console.error("Error deleting item:", error);
+    res.status(500).json({ error: "Server error while deleting item" });
+  }
+});
+
 
 
 

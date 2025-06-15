@@ -5,7 +5,7 @@ export const sendCartItem = async (product) => {
 
   
   try {
-    const token = localStorage.getItem("token"); 
+    
 
     
 
@@ -13,8 +13,9 @@ export const sendCartItem = async (product) => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization:  `Bearer ${token}`, 
+       
       },
+      credentials: "include",
       body: JSON.stringify({cartItems:product}),
     });
 
