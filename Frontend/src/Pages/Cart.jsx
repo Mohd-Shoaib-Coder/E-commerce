@@ -6,7 +6,13 @@ import { removeFromDb } from "../components/deleteCart";
 import { NavLink } from "react-router-dom";
 import Footer from "../components/Footer";
 
+
+
+
+
 const Cart = ({ setCartUpdated }) => {
+
+  const stripeKey=import.meta.env.STRIPE_PUBLIC_KEY
   const dispatch = useDispatch();
 
   const guestCart = useSelector((state) => state.cart.cart);
@@ -14,6 +20,10 @@ const Cart = ({ setCartUpdated }) => {
 
   const [userCart, setUserCart] = useState([]);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+   
+  
+
+
 
   useEffect(() => {
     const getCart = async () => {
@@ -39,6 +49,37 @@ const Cart = ({ setCartUpdated }) => {
   }, []);
 
   const displayCart = isLoggedIn ? userCart : guestCart;
+ 
+
+const payment=async()=>{
+ 
+
+  const response=await fetch("http://localhost:4000/payment",{
+
+    method:"POST",
+    headers:{
+      "Content-Type": "application/json",
+
+    },
+    credentials:"include",
+    body:JSON.stringify({items:displayCart}),
+  })
+    
+
+  const data=await response.json();
+
+  if(data.url){
+    window.location.href=data.url;
+  }else{
+
+    alert("Failed to create Stripe Session")
+  }
+
+
+  }
+
+  
+
 
   const getTotal = () => {
     return displayCart.reduce((total, item) => total + item.price * item.quantity, 0).toFixed(2);
@@ -103,7 +144,7 @@ const Cart = ({ setCartUpdated }) => {
         const result = await removeFromDb(product._id);
         if (result?.message === "Item deleted from database") {
           setUserCart(prev => prev.filter(item => item._id !== product._id));
-          setCartUpdated(prev => !prev); // 🔁 Trigger Navbar update
+          setCartUpdated(prev => !prev); 
         } else {
           alert("Failed to delete item from backend.");
         }
@@ -131,9 +172,16 @@ const Cart = ({ setCartUpdated }) => {
               <p className="text-xl sm:text-2xl font-bold text-[#212529]">
                 Total: ${isLoggedIn ? getTotal() : guestTotal}
               </p>
-              <button className="w-full sm:w-auto px-6 py-3 bg-blue-500 text-white text-md font-semibold rounded-md hover:bg-[#343a40] transition">
-                🧾 Proceed to Checkout
+             
+          
+
+           <button onClick={payment}  className="w-full sm:w-auto px-6 py-3 bg-blue-500 text-white text-md font-semibold rounded-md hover:bg-[#343a40] transition">
+                🧾 Buy Now
               </button>
+
+
+             
+             
             </div>
           )}
         </div>

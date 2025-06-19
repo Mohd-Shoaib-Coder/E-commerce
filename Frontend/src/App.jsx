@@ -5,7 +5,7 @@ import LoginPage from "./Pages/LoginPage";
 import Products from "./Pages/Products";
 import Cart from "./Pages/Cart";
 import Navbar from "./components/Navbar";
-import Profile from "./Pages/Profile";
+import Order from "./Pages/Order";
 import { useState, useEffect } from "react";
 import axios from "axios";
 
@@ -47,7 +47,7 @@ function App() {
         />
         <Route path="/products" element={<Products />} />
         <Route path="/cart" element={<Cart   loggedIn={loggedIn} cartUpdated={cartUpdated} setCartUpdated={setCartUpdated}/>} />
-        <Route path="/profile" element={<Profile/>} />
+        <Route path="/Order" element={<Order/>}/>
       </Routes>
     </>
   );

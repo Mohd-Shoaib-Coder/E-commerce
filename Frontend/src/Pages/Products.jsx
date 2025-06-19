@@ -24,8 +24,6 @@ const Products = () => {
   
   const itemsPerPage = 8
   
-  
-  // const ProductsToRender=filterState && filterState.length > 0 ? filterState : data 
     
 const ProductsToRender = filterState?.length > 0 ? filterState : data;
 
@@ -40,8 +38,6 @@ const filteredBySearch = searchQuery
 
   const startIndex = currentPage * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
-  // const visibleProducts = ProductsToRender?ProductsToRender.slice(startIndex, endIndex) : [];
-  // const totalPages = ProductsToRender ? Math.ceil(ProductsToRender.length / itemsPerPage) : 0;
   const visibleProducts = filteredBySearch?.slice(startIndex, endIndex) || [];
   const totalPages = filteredBySearch ? Math.ceil(filteredBySearch.length / itemsPerPage) : 0;
 
