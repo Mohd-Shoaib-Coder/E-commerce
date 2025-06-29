@@ -15,7 +15,7 @@ const dotenv=require("dotenv").config();
 const stripe=require("stripe")(process.env.STRIPE_SECRET_KEY)
 
 
-mongoose.connect("mongodb+srv://000sheikhsiddiqui:EbNEyTIsgtX3B7su@cluster0.8jisy.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0",{ 
+mongoose.connect(process.env.MONGODB_URI,{ 
     useNewUrlParser: true,
     useUnifiedTopology: true,
     family: 4,
@@ -371,16 +371,13 @@ res.status(200).json({message:"Logout successfull"})
 
 
 
-const Port=4000;
+const Port=process.env.PORT || 8000;
 
-app.listen(Port,
+app.listen(Port,()=>{
 
-    console.log(`Server is runnning on ${Port}`)
+  console.log(`Server is runnning on ${Port}`)
+}
+
+    
 )
 
-//Yh4oYi574SUrUUP9
-//EbNEyTIsgtX3B7su
-
-//Products api
-//https://dummyjson.com/products?limit=50
-//eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MGY2NGN

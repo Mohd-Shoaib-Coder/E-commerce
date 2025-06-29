@@ -42,6 +42,13 @@ useEffect(() => {
 
 
 
+useEffect(() => {
+  if (!loggedIn) {
+    setCartCount(cartItems.reduce((acc, item) => acc + item.quantity, 0));
+  }
+}, [cartItems, loggedIn]);
+
+
 const handleSearch = (e) => {
   if (e.key === "Enter" && localQuery.trim()) {
     dispatch(setSearchQuery(localQuery));
@@ -58,7 +65,7 @@ const closeDropdowns = () => {
 
 
 useEffect(() => {
-  const checkLoginAndCart = async () => {
+  const checkLogin = async () => {
     try {
       const res = await fetch("http://localhost:4000/verify", {
         method: "GET",
@@ -68,20 +75,57 @@ useEffect(() => {
 
       if (result?.status) {
         setLoggedIn(true);
-        const userCart = await fetchUserCart();
-        setCartCount(userCart.length); // 🔁 Update cart bubble count
       } else {
         setLoggedIn(false);
-        setCartCount(cartItems.length);
       }
     } catch (err) {
-      console.error("Navbar check error:", err);
-      setCartCount(cartItems.length);
+      console.error("Login check error:", err);
+      setLoggedIn(false);
     }
   };
 
-  checkLoginAndCart();
-}, [loggedIn, cartUpdated]);
+  checkLogin();
+}, []);
+
+
+
+
+
+useEffect(() => {
+  const fetchCart = async () => {
+    if (loggedIn) {
+      const userCart = await fetchUserCart();
+      setCartCount(userCart.reduce((acc, item) => acc + item.quantity, 0));
+    } else {
+     
+      setCartCount(cartItems.reduce((acc, item) => acc + item.quantity, 0));
+    }
+  };
+
+  fetchCart();
+}, [loggedIn, cartUpdated, cartItems]);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

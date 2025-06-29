@@ -24,9 +24,10 @@ export const sendCartItem = async (product) => {
     }
 
     const data = await response.json();
-    console.log("Cart item sent:", data);
+    return data;
   } catch (error) {
     console.error("Error sending cart item:", error.message);
+    return null;
   }
 };
 
