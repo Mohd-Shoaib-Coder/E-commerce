@@ -8,6 +8,7 @@ import { useState } from "react";
 import { fetchUserCart } from "./fetchUserCart";
 import { CgProfile } from "react-icons/cg";
 import { setSearchQuery } from "../Redux/Slice/searchItems";
+import Order from "../Pages/Order";
 
 
 const Navbar = ({ loggedIn, setLoggedIn,cartUpdated }) => {
@@ -24,28 +25,47 @@ const Navbar = ({ loggedIn, setLoggedIn,cartUpdated }) => {
   const navigate=useNavigate();
   const location = useLocation();
 
-const handleSearch=(e)=>{
-if(e.key==="Enter"){
 
-  dispatch(setSearchQuery(localQuery));
-  navigate("/products")
-}
-
-}
 
 
  useEffect(() => {
-    dispatch(setSearchQuery(localQuery));
+  dispatch(setSearchQuery(localQuery)); 
+}, [localQuery, dispatch]);
 
-   
-    if (localQuery && location.pathname !== "/products") {
-      navigate("/products");
-    }
-  }, [localQuery, dispatch, navigate, location]);
 
 
 useEffect(() => {
-  const checkLoginAndCart = async () => {
+  if (location.pathname !== "/products") {
+    setLocalQuery("");
+  }
+}, [location]);
+
+
+
+useEffect(() => {
+  if (!loggedIn) {
+    setCartCount(cartItems.reduce((acc, item) => acc + item.quantity, 0));
+  }
+}, [cartItems, loggedIn]);
+
+
+const handleSearch = (e) => {
+  if (e.key === "Enter" && localQuery.trim()) {
+    dispatch(setSearchQuery(localQuery));
+    navigate("/products");
+    setShowMenu(false);
+  }
+};
+
+const closeDropdowns = () => {
+  setShowMenu(false);
+  setShowCard(false);
+};
+
+
+
+useEffect(() => {
+  const checkLogin = async () => {
     try {
       const res = await fetch("http://localhost:4000/verify", {
         method: "GET",
@@ -55,20 +75,57 @@ useEffect(() => {
 
       if (result?.status) {
         setLoggedIn(true);
-        const userCart = await fetchUserCart();
-        setCartCount(userCart.length); // 🔁 Update cart bubble count
       } else {
         setLoggedIn(false);
-        setCartCount(cartItems.length);
       }
     } catch (err) {
-      console.error("Navbar check error:", err);
-      setCartCount(cartItems.length);
+      console.error("Login check error:", err);
+      setLoggedIn(false);
     }
   };
 
-  checkLoginAndCart();
-}, [cartItems.length, cartUpdated]);
+  checkLogin();
+}, []);
+
+
+
+
+
+useEffect(() => {
+  const fetchCart = async () => {
+    if (loggedIn) {
+      const userCart = await fetchUserCart();
+      setCartCount(userCart.reduce((acc, item) => acc + item.quantity, 0));
+    } else {
+     
+      setCartCount(cartItems.reduce((acc, item) => acc + item.quantity, 0));
+    }
+  };
+
+  fetchCart();
+}, [loggedIn, cartUpdated, cartItems]);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -156,28 +213,16 @@ window.location.reload();
 
   {/* Search Bar */}
   <div className="relative w-[500px]">
-    <input
-      type="text"
-      id="search"
-      className="peer h-[50px] w-full rounded-xl border-2 border-gray-300 bg-white px-4 py-2 text-gray-900 placeholder-transparent shadow-md transition-all duration-300 focus:border-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-200 focus:shadow-lg focus:scale-[1.01]"
-      placeholder="Search for products..."
-      value={localQuery}
-      onChange={(e)=>setLocalQuery(e.target.value)}
-      onKeyDown={handleSearch}
-    />
-    <label
-      htmlFor="search"
-      className="absolute left-4 top-2.5 text-gray-500 text-sm transition-all duration-200 
-        peer-placeholder-shown:top-[12px] 
-        peer-placeholder-shown:text-base 
-        peer-placeholder-shown:text-gray-400 
-        peer-focus:top-2 
-        peer-focus:text-sm 
-        peer-focus:text-gray-500 
-        peer-focus:opacity-0"
-    >
-      Search for products...
-    </label>
+   <input
+  type="text"
+  id="search"
+  className="h-[50px] w-full rounded-xl border-2 border-gray-300 bg-white px-4 py-2 text-gray-900 shadow-md transition-all duration-300 focus:border-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-200 focus:shadow-lg focus:scale-[1.01]"
+  placeholder="Search for products..."
+  value={localQuery}
+  onChange={(e) => setLocalQuery(e.target.value)}
+  onKeyDown={handleSearch}
+/>
+   
   </div>
 
   {/* Cart + Auth Buttons */}
@@ -193,7 +238,7 @@ window.location.reload();
 
     {loggedIn && (
 <NavLink
-  to="/profile"
+  to="/Order"
   className={({ isActive }) =>
     `p-2 rounded-md ${isActive
       ? "bg-gray-300 text-black shadow-md"
@@ -290,24 +335,12 @@ window.location.reload();
       type="text"
       id="search"
       className="peer w-full h-[45px] rounded-xl border-2 border-gray-300 bg-white px-3 py-2 text-gray-900 placeholder-transparent shadow-md transition-all duration-300 focus:border-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-200 focus:shadow-lg"
-      placeholder="Search for products..."
+      placeholder={localQuery === "" ? "Search for products..." : ""}
       value={localQuery}
       onChange={(e)=>setLocalQuery(e.target.value)}
       onKeyDown={handleSearch}
     />
-    <label
-      htmlFor="search"
-      className="absolute left-4 top-2.5 text-gray-500 text-sm transition-all duration-200 
-        peer-placeholder-shown:top-[12px] 
-        peer-placeholder-shown:text-base 
-        peer-placeholder-shown:text-gray-400 
-        peer-focus:top-2 
-        peer-focus:text-sm 
-        peer-focus:text-gray-500 
-        peer-focus:opacity-0"
-    >
-      Search for products...
-    </label>
+    
   </div>
 )}
 
@@ -319,27 +352,30 @@ window.location.reload();
 
        <div className="absolute top-20 right-5 w-52 bg-white rounded-2xl shadow-md p-5 flex flex-col gap-4 z-50 border border-gray-200 transition-all duration-300 hover:scale-[1.02]  hover:shadow-xl">
    
-  <NavLink to="/" className="flex justify-center text-gray-800 font-semibold text-base hover:bg-gray-200 hover:scale-[1.01] rounded-md py-2 px-3 transition-all duration-200">
+  <NavLink to="/" onClick={closeDropdowns} className="flex justify-center text-gray-800 font-semibold text-base hover:bg-gray-200 hover:scale-[1.01] rounded-md py-2 px-3 transition-all duration-200">
     Home
   </NavLink>
-  <NavLink to="/products" className="flex justify-center text-gray-800 font-semibold text-base hover:bg-gray-200 hover:scale-[1.01] rounded-md py-2 px-3 transition-all duration-200">
+  <NavLink to="/products" onClick={closeDropdowns} className="flex justify-center text-gray-800 font-semibold text-base hover:bg-gray-200 hover:scale-[1.01] rounded-md py-2 px-3 transition-all duration-200">
     Products
   </NavLink>
-  <NavLink to="/profile" className="flex justify-center text-gray-800 font-semibold text-base hover:bg-gray-200 hover:scale-[1.01] rounded-md py-2 px-3 transition-all duration-200">
+  <NavLink to="/Order" onClick={closeDropdowns} className="flex justify-center text-gray-800 font-semibold text-base hover:bg-gray-200 hover:scale-[1.01] rounded-md py-2 px-3 transition-all duration-200">
     Orders
   </NavLink>
-  <NavLink to="/cart" className="flex justify-center text-gray-800 font-semibold text-base hover:bg-gray-200 hover:scale-[1.01] rounded-md py-2 px-3 transition-all duration-200">
+  <NavLink to="/cart" onClick={closeDropdowns} className="flex justify-center text-gray-800 font-semibold text-base hover:bg-gray-200 hover:scale-[1.01] rounded-md py-2 px-3 transition-all duration-200">
     Cart
   </NavLink>
 {
   loggedIn ? 
   <button 
-    onClick={logOut} 
+    onClick={()=>{
+      logOut();
+      closeDropdowns();
+    }} 
     className="flex justify-center text-gray-800 font-semibold text-base hover:bg-gray-200 hover:scale-[1.01] rounded-md py-2 px-3 transition-all duration-200"
   >
     LogOut
   </button> : 
-  <NavLink to="/login" className="flex justify-center text-gray-800 font-semibold text-base hover:bg-gray-200 hover:scale-[1.01] rounded-md py-2 px-3 transition-all duration-200">
+  <NavLink to="/login" onClick={closeDropdowns} className="flex justify-center text-gray-800 font-semibold text-base hover:bg-gray-200 hover:scale-[1.01] rounded-md py-2 px-3 transition-all duration-200">
     LogIn
   </NavLink>
 }

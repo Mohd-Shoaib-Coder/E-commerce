@@ -3,16 +3,19 @@ const mongoose=require("mongoose")
 const cors=require("cors")
 const app=express();
 const userModel=require("./Models/user");
-const cartModel=require("./Models/cart")
+const cartModel=require("./Models/cart");
+const orderModel=require("./Models/order");
 const cookieParser=require("cookie-parser")
 const bcrypt = require('bcrypt');
 const saltRounds=10;
 const jwt=require("jsonwebtoken")
 const verifyUser=require("./Middlewares/verify");
+const {v4:uuidv4}=require("uuid");
+const dotenv=require("dotenv").config();
+const stripe=require("stripe")(process.env.STRIPE_SECRET_KEY)
 
 
-
-mongoose.connect("mongodb+srv://000sheikhsiddiqui:EbNEyTIsgtX3B7su@cluster0.8jisy.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0",{ 
+mongoose.connect(process.env.MONGODB_URI,{ 
     useNewUrlParser: true,
     useUnifiedTopology: true,
     family: 4,
@@ -152,6 +155,7 @@ app.post("/cart", verifyUser, async function(req, res) {
   try {
     
     const { cartItems } = req.body;
+    
    
     const userId = req.userId; 
    
@@ -245,6 +249,111 @@ app.post("/delete", verifyUser, async (req, res) => {
 
 
 
+
+
+app.post("/payment",verifyUser,async function(req,res){
+
+
+try{
+
+
+  const userId = req.userId;
+
+  const { items } = req.body;
+
+    const line_items = items.map((item) => ({
+      price_data: {
+        currency: "usd",
+        product_data: {
+          name: item.title,
+          images: [item.image],
+        },
+        unit_amount: item.price * 100 ,
+      },
+      quantity: item.quantity,
+    }));
+      
+
+      const totalAmount = items.reduce((acc, item) => acc + item.price * item.quantity, 0);
+
+const orderItems=items.map((item)=>({
+
+ title:item.title,
+price: item.price,
+quantity: item.quantity,
+image: item.image,
+
+}))
+
+       await orderModel.create({
+      user: userId,
+      items,
+      totalAmount,
+    });
+
+    const session=await stripe.checkout.sessions.create({
+
+    payment_method_types:["card"],
+    line_items,
+    mode:"payment",
+    success_url:"http://localhost:5173/order",
+    cancel_url:"http://localhost:5173/cart",
+
+    
+
+    })
+res.json({url:session.url})
+
+}catch(err){
+
+  console.error("Stripe checkout session error:", err.message);
+    res.status(500).json({ error: "Failed to create checkout session" });
+
+
+}
+
+
+});
+  
+
+
+
+
+  app.get("/order",verifyUser,async function(req,res){
+
+ try {
+    const userId = req.userId;
+
+    const orders = await orderModel.find({ user: userId }).sort({ createdAt: -1 });
+
+    res.status(200).json({
+      message: "Orders fetched successfully",
+      status: true,
+      orders
+    });
+
+  } catch (err) {
+    console.error("Failed to fetch orders:", err.message);
+    res.status(500).json({ error: "Failed to fetch orders" });
+  }
+
+
+  })
+
+
+
+
+
+
+ 
+ 
+ 
+
+
+
+
+
+
 app.post("/logout",function(req,res){
 
 res.clearCookie("token",{
@@ -262,16 +371,13 @@ res.status(200).json({message:"Logout successfull"})
 
 
 
-const Port=4000;
+const Port=process.env.PORT || 8000;
 
-app.listen(Port,
+app.listen(Port,()=>{
 
-    console.log(`Server is runnning on ${Port}`)
+  console.log(`Server is runnning on ${Port}`)
+}
+
+    
 )
 
-//Yh4oYi574SUrUUP9
-//EbNEyTIsgtX3B7su
-
-//Products api
-//https://dummyjson.com/products?limit=50
-//eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MGY2NGN

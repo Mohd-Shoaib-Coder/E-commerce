@@ -7,11 +7,11 @@ import { fetchData } from "../Redux/Slice/productItem";
 import { addToCart } from "../Redux/Slice/cartItem";
 import { sendCartItem } from "../components/apiCart";
 import { setSearchQuery } from "../Redux/Slice/searchItems";
-import { useLocation } from "react-router-dom";
 
 
 
-const Products = () => {
+
+const Products = ({setCartUpdated}) => {
 
 
 
@@ -24,8 +24,6 @@ const Products = () => {
   
   const itemsPerPage = 8
   
-  
-  // const ProductsToRender=filterState && filterState.length > 0 ? filterState : data 
     
 const ProductsToRender = filterState?.length > 0 ? filterState : data;
 
@@ -40,8 +38,6 @@ const filteredBySearch = searchQuery
 
   const startIndex = currentPage * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
-  // const visibleProducts = ProductsToRender?ProductsToRender.slice(startIndex, endIndex) : [];
-  // const totalPages = ProductsToRender ? Math.ceil(ProductsToRender.length / itemsPerPage) : 0;
   const visibleProducts = filteredBySearch?.slice(startIndex, endIndex) || [];
   const totalPages = filteredBySearch ? Math.ceil(filteredBySearch.length / itemsPerPage) : 0;
 
@@ -70,9 +66,37 @@ useEffect(() => {
 
 useEffect(() => {
   return () => {
-    dispatch(setSearchQuery("")); // clear search query when leaving the page
+    dispatch(setSearchQuery("")); 
   };
 }, [dispatch]);
+
+const handleAddToCart = async (product) => {
+  try {
+    const res = await fetch("http://localhost:4000/verify", {
+      method: "GET",
+      credentials: "include",
+    });
+
+    const result = await res.json();
+
+    if (result?.status) {
+      
+      const response = await sendCartItem(product);
+      if (response?.status) {
+        setCartUpdated(prev => !prev);
+      }else{
+
+        console.error("Cart save failed or returned no status");
+      }
+    } else {
+      dispatch(addToCart(product));
+      setCartUpdated(prev => !prev);
+    }
+  } catch (err) {
+    console.error("Add to cart failed:", err);
+  }
+};
+
 
   return (
     <>
@@ -116,10 +140,7 @@ useEffect(() => {
         </p>
         <div className="mt-auto">
           <button
-            onClick={() => {
-              dispatch(addToCart(product));
-              sendCartItem(product);
-            }}
+             onClick={() => handleAddToCart(product)}
             className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 font-semibold"
           >
             Add to Cart

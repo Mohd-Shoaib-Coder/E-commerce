@@ -1,10 +1,45 @@
-
-
 import React from "react";
 import { motion } from "framer-motion";
 import { NavLink } from "react-router-dom";
+import { useState,useEffect } from "react";
+import {  AnimatePresence } from "framer-motion";
+import { FaArrowRight } from "react-icons/fa";
+import { FaArrowLeft } from "react-icons/fa";
+import banner1 from "../utils/banner1.jpg";
+import banner2 from "../utils/banner2.jpg";
+import banner3 from "../utils/banner3.jpg";
+import banner4 from "../utils/banner4.jpg";
+import Lottie from "lottie-react";
+import homepageAnimation from "../assets/home-animation.json"; 
+
+
+
+
+const images = [banner3,banner1,banner2,banner4]
 
 const HomePage = () => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [direction, setDirection] = useState(0);
+
+  const nextImage = () => {
+    setDirection(1);
+    setCurrentIndex((prev) => (prev + 1) % images.length);
+  };
+
+  const prevImage = () => {
+    setDirection(-1);
+    setCurrentIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
+  };
+
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      nextImage();
+    }, 5000);
+
+    return () => clearInterval(interval); 
+  }, []);
+
   return (
 <>
 
@@ -19,25 +54,26 @@ const HomePage = () => {
         }}
       >
         <motion.div
-          initial={{ opacity: 0, y: -50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1 }}
-          className="text-center bg-black p-8 rounded-lg"
-        >
-          <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
-            Welcome to Our Store
-          </h1>
-          <p className="text-lg md:text-xl text-gray-200 mb-8">
-            Discover the best in lifestyle, electronics, and daily essentials.
-          </p>
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="bg-blue-600 text-white px-8 py-3 rounded-full hover:bg-blue-700 transition duration-300"
-          >
-            <NavLink to="/products">Shop Now</NavLink>
-          </motion.button>
-        </motion.div>
+  initial={{ opacity: 0, y: -50 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ duration: 1 }}
+  className="text-center bg-black p-8 rounded-lg mx-4 sm:mx-0"
+>
+  <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
+    Welcome to Our Store
+  </h1>
+  <p className="text-lg md:text-xl text-gray-200 mb-8">
+    Discover the best in lifestyle, electronics, and daily essentials.
+  </p>
+  <motion.button
+    whileHover={{ scale: 1.05 }}
+    whileTap={{ scale: 0.95 }}
+    className="bg-blue-600 text-white px-8 py-3 rounded-full hover:bg-blue-700 transition duration-300"
+  >
+    <NavLink to="/products">Shop Now</NavLink>
+  </motion.button>
+</motion.div>
+
       </section>
 
 
@@ -108,7 +144,7 @@ const HomePage = () => {
             className="overflow-hidden rounded-lg shadow-lg"
           >
             <img
-              src="https://images.unsplash.com/photo-1609709295948-17d77cb2a69b?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8bWFsbCUyMHdhcmRyb2JlfGVufDB8fDB8fHww"
+              src="https://plus.unsplash.com/premium_photo-1671469876887-b2733ac9c785?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTd8fGNsb3RoaW5nJTIwY29sbGVjdGlvbnxlbnwwfHwwfHx8MA%3D%3D"
               alt="Child Model"
               className="w-full h-64 object-cover"
             />
@@ -133,6 +169,46 @@ const HomePage = () => {
     viewport={{ once: true }}
     className="text-3xl font-bold text-center mb-8"
   >
+
+   
+
+ {/* Image Carousel */}
+<section className="relative w-full max-w-5xl mx-auto my-10">
+  <div className="overflow-hidden relative h-[300px] rounded-lg shadow-lg">
+    <AnimatePresence initial={false} custom={direction}>
+      <motion.img
+        key={currentIndex}
+        src={images[currentIndex]}
+        alt={`Slide ${currentIndex + 1}`}
+        className="absolute w-full h-full object-cover"
+        initial={{ x: direction > 0 ? 300 : -300, opacity: 0 }}
+        animate={{ x: 0, opacity: 1 }}
+        exit={{ x: direction < 0 ? 300 : -300, opacity: 0 }}
+        transition={{ duration: 0.5 }}
+      />
+    </AnimatePresence>
+  </div>
+
+  {/* Centered BIG Buttons with Equal Top/Bottom Padding */}
+  <div className="absolute inset-y-0 w-full flex justify-between items-center px-4 z-10">
+    <button
+      onClick={prevImage}
+      className="bg-white/80 hover:bg-white text-gray-800 text-4xl rounded-full w-14 h-14 shadow-md border border-gray-300 flex items-center justify-center transition duration-200"
+    >
+      <span className="flex items-center justify-center h-full w-full"><FaArrowLeft /></span>
+    </button>
+    <button
+      onClick={nextImage}
+      className="bg-white/80 hover:bg-white text-gray-800 text-4xl rounded-full w-14 h-14 shadow-md border border-gray-300 flex items-center justify-center transition duration-200"
+    >
+      <span className="flex items-center justify-center h-full w-full"><FaArrowRight /></span>
+    </button>
+  </div>
+</section>
+
+
+
+
     Featured Products
   </motion.h2>
   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
@@ -142,7 +218,7 @@ const HomePage = () => {
       transition={{ duration: 0.3 }}
       className="bg-white rounded-lg shadow-lg overflow-hidden"
     >
-      <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80" alt="Product 1" className="w-full h-64 object-cover" />
+      <img src="https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fHNob2VzfGVufDB8fDB8fHww" alt="Product 1" className="w-full h-64 object-cover" />
       <div className="p-6">
         <h3 className="text-xl font-semibold mb-2">Stylish Sneakers</h3>
         <p className="text-gray-600 mb-4">Perfect for your daily adventures.</p>
@@ -158,7 +234,7 @@ const HomePage = () => {
       transition={{ duration: 0.3 }}
       className="bg-white rounded-lg shadow-lg overflow-hidden"
     >
-      <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80" alt="Product 2" className="w-full h-64 object-cover" />
+      <img src="https://media.istockphoto.com/id/1633583827/photo/young-boy-listening-music-and-dancing-on-white-background.webp?a=1&b=1&s=612x612&w=0&k=20&c=OyZ6krUUy6SYwnaEcbCmh7OajTE_NLNXPbeTkgI8C2U=" alt="Product 2" className="w-full h-64 object-cover" />
       <div className="p-6">
         <h3 className="text-xl font-semibold mb-2">Wireless Headphones</h3>
         <p className="text-gray-600 mb-4">Immerse yourself in music.</p>
@@ -174,7 +250,7 @@ const HomePage = () => {
       transition={{ duration: 0.3 }}
       className="bg-white rounded-lg shadow-lg overflow-hidden"
     >
-      <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80" alt="Product 3" className="w-full h-64 object-cover" />
+      <img src="https://plus.unsplash.com/premium_photo-1714306767578-84587d000c48?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDR8fHxlbnwwfHx8fHw%3D" alt="Product 3" className="w-full h-64 object-cover" />
       <div className="p-6">
         <h3 className="text-xl font-semibold mb-2">Smart Watch</h3>
         <p className="text-gray-600 mb-4">Stay connected and stylish.</p>
@@ -185,6 +261,78 @@ const HomePage = () => {
     </motion.div>
   </div>
 </section>
+
+
+
+{/* Lottie Animation Section */}
+<section className="py-12 px-4">
+  <div className="max-w-3xl mx-auto flex flex-col items-center justify-center">
+    <div className="w-[280px] sm:w-[400px] md:w-[500px] mb-6">
+      <Lottie animationData={homepageAnimation} loop={true} />
+    </div>
+    <h2 className="text-2xl sm:text-3xl font-semibold text-gray-700 text-center">
+      Experience Shopping Like Never Before ✨
+    </h2>
+    <p className="text-gray-500 text-md text-center mt-2 max-w-md">
+      Enjoy fast delivery, premium products, and exclusive offers curated just for you.
+    </p>
+  </div>
+</section>
+
+
+
+<section className="w-full max-w-7xl mx-auto px-4 py-16">
+  <motion.h2
+    initial={{ opacity: 0, y: 20 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.8 }}
+    className="text-3xl font-bold text-center mb-10 text-gray-800"
+  >
+    🌟 Our Trusted Brand Partners
+  </motion.h2>
+
+  <div className="border border-gray-200 rounded-2xl shadow-xl p-6 sm:p-10">
+  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-6 place-items-center">
+    {[
+      {
+        name: "Shopee",
+        src: "https://freepngimg.com/thumb/logo/109004-shopee-logo-free-transparent-image-hq-thumb.png",
+      },
+      {
+        name: "Zara",
+        src: "https://freepngimg.com/thumb/zara/173263-zara-free-hq-image-thumb.png",
+      },
+      {
+        name: "Adidas",
+        src: "https://freepngimg.com/thumb/logo/69593-originals-adidas-smith-stan-logo-sportswear-thumb.png",
+      },
+      {
+        name: "Nike",
+        src: "https://freepngimg.com/thumb/nike/28093-5-nike-logo-image-thumb.png",
+      },
+      {
+        name: "Haier",
+        src: "https://freepngimg.com/thumb/logo/110052-logo-haier-free-download-image-thumb.png",
+      },
+
+    ].map((brand, index) => (
+      <motion.div
+        key={index}
+        className="p-4 bg-white rounded-xl border border-gray-200 shadow hover:shadow-xl transition duration-300 flex items-center justify-center w-32 h-32"
+        whileHover={{ scale: 1.1 }}
+      >
+        <img
+          src={brand.src}
+          alt={brand.name}
+          className="h-16 w-auto object-contain transition duration-300"
+        />
+      </motion.div>
+    ))}
+  </div>
+</div>
+
+</section>
+
 
       
     </div>
@@ -200,4 +348,3 @@ const HomePage = () => {
 
 export default HomePage;
 
-//https://cdn.pixabay.com/photo/2020/05/21/18/52/supermarket-5202138_640.jpg

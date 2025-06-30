@@ -5,7 +5,7 @@ import LoginPage from "./Pages/LoginPage";
 import Products from "./Pages/Products";
 import Cart from "./Pages/Cart";
 import Navbar from "./components/Navbar";
-import Profile from "./Pages/Profile";
+import Order from "./Pages/Order";
 import { useState, useEffect } from "react";
 import axios from "axios";
 
@@ -24,7 +24,7 @@ function App() {
 
         if (res.data.status) {
           setUser(res.data.user);
-          setLoggedIn(true); // ✅ set this
+          setLoggedIn(true); 
         }
       } catch (err) {
         console.log("Not logged in", err);
@@ -45,9 +45,9 @@ function App() {
           path="/login"
           element={<LoginPage loggedIn={loggedIn} setLoggedIn={setLoggedIn} />}
         />
-        <Route path="/products" element={<Products />} />
+        <Route path="/products" element={<Products cartUpdated={cartUpdated}  setCartUpdated={setCartUpdated} /> } />
         <Route path="/cart" element={<Cart   loggedIn={loggedIn} cartUpdated={cartUpdated} setCartUpdated={setCartUpdated}/>} />
-        <Route path="/profile" element={<Profile/>} />
+        <Route path="/Order" element={<Order/>}/>
       </Routes>
     </>
   );
