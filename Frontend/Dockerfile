@@ -1,4 +1,4 @@
-FROM node:18 as builder
+FROM node:18 AS builder
 
 
 
@@ -16,7 +16,7 @@ COPY . .
 RUN npm run build
 
 
-FROM nginx:alpine as runner
+FROM nginx:alpine AS runner
 
 
 COPY --from=builder /app/dist /usr/share/nginx/html
