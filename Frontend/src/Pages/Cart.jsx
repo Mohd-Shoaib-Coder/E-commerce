@@ -19,7 +19,7 @@ const Cart = ({ setCartUpdated }) => {
   useEffect(() => {
     const getCart = async () => {
       try {
-        const response = await fetch("https://e-commerce-9xb7.onrender.com/verify", {
+        const response = await fetch("http://localhost:4000/verify", {
           method: "GET",
           credentials: "include",
         });
@@ -42,7 +42,7 @@ const Cart = ({ setCartUpdated }) => {
   const displayCart = isLoggedIn ? userCart : guestCart;
 
   const payment = async () => {
-    const response = await fetch("https://e-commerce-9xb7.onrender.com/payment", {
+    const response = await fetch("http://localhost:4000/payment", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

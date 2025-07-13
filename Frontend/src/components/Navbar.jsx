@@ -67,7 +67,7 @@ const closeDropdowns = () => {
 useEffect(() => {
   const checkLogin = async () => {
     try {
-      const res = await fetch("https://e-commerce-9xb7.onrender.com/verify", {
+      const res = await fetch("http://localhost:4000/verify", {
         method: "GET",
         credentials: "include",
       });
