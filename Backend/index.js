@@ -33,8 +33,9 @@ app.use(cors({
       "http://localhost:5173",
       "https://e-commerce-frontend-5wyd.onrender.com",
     ],
+    credentials:true,
     methods:["GET","POST","DELETE", "PUT"],
-    credentials:true
+   
 }));
 
 
@@ -123,7 +124,7 @@ try{
 
         const token=jwt.sign({id:user._id},"abbajabbadabba");
         
-        res.cookie("token",token,{ httpOnly: true , sameSite: "Lax", })
+        res.cookie("token",token,{ httpOnly: true , sameSite: "None",secure: true, })
        return res.status(200).json({
       message: "Login successful",
       user: {
@@ -361,8 +362,8 @@ app.post("/logout",function(req,res){
 
 res.clearCookie("token",{
   httpOnly:true,
-  sameSite:"Lax",
-  secure:false,
+  sameSite:"None",
+  secure:true,
 });
 res.status(200).json({message:"Logout successfull"})
 
