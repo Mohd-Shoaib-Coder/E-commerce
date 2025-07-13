@@ -18,7 +18,7 @@ function App() {
   useEffect(() => {
     const checkUser = async () => {
       try {
-        const res = await axios.get("http://localhost:4000/verify", {
+        const res = await axios.get("https://e-commerce-frontend-ztfj.onrender.com/verify", {
           withCredentials: true,
         });
 

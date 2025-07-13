@@ -67,7 +67,7 @@ const closeDropdowns = () => {
 useEffect(() => {
   const checkLogin = async () => {
     try {
-      const res = await fetch("http://localhost:4000/verify", {
+      const res = await fetch("https://e-commerce-backend-15s7.onrender.com/verify", {
         method: "GET",
         credentials: "include",
       });
@@ -104,27 +104,6 @@ useEffect(() => {
 
   fetchCart();
 }, [loggedIn, cartUpdated, cartItems]);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
