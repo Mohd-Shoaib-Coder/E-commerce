@@ -67,7 +67,7 @@ const closeDropdowns = () => {
 useEffect(() => {
   const checkLogin = async () => {
     try {
-      const res = await fetch("https://e-commerce-backend-15s7.onrender.com/verify", {
+      const res = await fetch("https://e-commerce-backend-gshd.onrender.com/verify", {
         method: "GET",
         credentials: "include",
       });
@@ -117,7 +117,7 @@ useEffect(() => {
 
       const token=localStorage.getItem("token");
 
-      const response=await fetch("http://localhost:4000/logout",{
+      const response=await fetch("https://e-commerce-backend-gshd.onrender.com/logout",{
 
         method:"POST",
         credentials:"include"

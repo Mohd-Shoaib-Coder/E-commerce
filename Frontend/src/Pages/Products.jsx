@@ -72,7 +72,7 @@ useEffect(() => {
 
 const handleAddToCart = async (product) => {
   try {
-    const res = await fetch("https://e-commerce-backend-15s7.onrender.com/verify", {
+    const res = await fetch("https://e-commerce-backend-gshd.onrender.com/verify", {
       method: "GET",
       credentials: "include",
     });

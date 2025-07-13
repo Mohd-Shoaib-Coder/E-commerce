@@ -34,7 +34,7 @@ if(password !== cnfrmpassword){
 
 e.preventDefault();
 
-const response = await fetch("https://e-commerce-backend-15s7.onrender.com/signup",{
+const response = await fetch("https://e-commerce-backend-gshd.onrender.com/signup",{
   method:"POST",
   body:JSON.stringify({firstname,lastname,email,number,password,cnfrmpassword}),
   headers:{"Content-Type":"application/json"},

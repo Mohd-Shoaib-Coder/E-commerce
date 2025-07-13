@@ -9,7 +9,7 @@ export const sendCartItem = async (product) => {
 
     
 
-    const response = await fetch("https://e-commerce-backend-15s7.onrender.com/cart", {
+    const response = await fetch("https://e-commerce-backend-gshd.onrender.com/cart", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
