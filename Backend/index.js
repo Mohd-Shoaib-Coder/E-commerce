@@ -31,7 +31,7 @@ app.use(cookieParser())
 app.use(cors({
     origin:[
       "http://localhost:5173",
-      "https://e-commerce-frontend-ztfj.onrender.com"
+      "https://e-commerce-frontend-kdgy.onrender.com",
     ],
     methods:["GET","POST","DELETE", "PUT"],
     credentials:true
