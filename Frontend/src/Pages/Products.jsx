@@ -72,7 +72,7 @@ useEffect(() => {
 
 const handleAddToCart = async (product) => {
   try {
-    const res = await fetch("http://localhost:4000/verify", {
+    const res = await fetch("https://e-commerce-9xb7.onrender.com/verify", {
       method: "GET",
       credentials: "include",
     });

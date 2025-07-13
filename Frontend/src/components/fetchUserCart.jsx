@@ -1,6 +1,6 @@
 export const fetchUserCart = async () => {
   try {
-    const response = await fetch("http://localhost:4000/cart", {
+    const response = await fetch("https://e-commerce-9xb7.onrender.com/cart", {
       method: "GET",
       credentials: "include",
     });

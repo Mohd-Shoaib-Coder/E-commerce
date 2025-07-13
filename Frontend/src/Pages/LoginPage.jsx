@@ -20,7 +20,7 @@ try{
 
 const loginData={email,password};
 
-  const response=await fetch("http://localhost:4000/login",{
+  const response=await fetch("https://e-commerce-9xb7.onrender.com/login",{
 
 method:"POST",
 body:JSON.stringify(loginData),

@@ -10,7 +10,7 @@ const Order = () => {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const response = await fetch("http://localhost:4000/order", {
+        const response = await fetch("https://e-commerce-9xb7.onrender.com/order", {
           method: "GET",
           credentials: "include",
         });

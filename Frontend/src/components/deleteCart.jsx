@@ -1,6 +1,6 @@
 export const  removeFromDb=async(itemId)=>{
 try{
-const response =await fetch("http://localhost:4000/delete",{
+const response =await fetch("https://e-commerce-9xb7.onrender.com/delete",{
 
 method:"POST",
 credentials:"include",
