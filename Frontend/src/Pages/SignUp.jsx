@@ -38,6 +38,7 @@ const response = await fetch("https://e-commerce-backend-gshd.onrender.com/signu
   method:"POST",
   body:JSON.stringify({firstname,lastname,email,number,password,cnfrmpassword}),
   headers:{"Content-Type":"application/json"},
+  credentials: "include",
   
 
  })
